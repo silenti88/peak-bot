@@ -2,6 +2,7 @@ const Discord = require("discord.js");
 const fs = require ("fs");
 const message_sent = require("../message_sent.json");
 
+
 module.exports = async (client,message) => {
     /**
      * I STRONGLY ADVISE NOT TO CHANGE ANYTHING HERE
@@ -11,18 +12,18 @@ module.exports = async (client,message) => {
     if(message.channel.type === "dm") return;
     if(message.author.bot) return;
 
+    message_sent.todaysRecord[2] += 1
 
     if(message_sent[message.author.id]){
 
         message_sent[message.author.id] += 1;
 
-        message_sent.oatRecord[1] = message_sent[message.author.id];
-        message_sent.todaysRecord [1] = message_sent[message.author.id];
+        if(message_sent.todaysRecord[1] < message_sent[message.author.id]){
+            message_sent.todaysRecord[0] = message.author.id;
+            message_sent.todaysRecord[1] = message_sent[message.author.id];
+        }
 
-        if(message_sent.oatRecord[0] !== message.author.id) message_sent.oatRecord[0] = message.author.id;
-        if(message_sent.todaysRecord[0] !== message.author.id)  message_sent.todaysRecord[0] = message.author.id;
-
-    }else   message_sent[message.author.id] = 1;
+    }else{message_sent[message.author.id] = 1}
     
     fs.writeFile("message_sent.json",JSON.stringify(message_sent), (err)=>{console.error});
 
