@@ -14,6 +14,7 @@ module.exports.run = async (client, message, args) => {
     fs.writeFile("announcementChannel.json",JSON.stringify(announcementChannel), (err) => {
         console.error();
     });
+    message.channel.send("DONE!!!");
 } 
 
 module.exports.help = {
