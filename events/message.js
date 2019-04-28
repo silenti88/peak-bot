@@ -3,7 +3,7 @@ const fs = require ("fs");
 const message_sent = require("../message_sent.json");
 
 
-module.exports = async (client,message) => {
+module.exports = async (client,message,userMessages) => {
     /**
      * I STRONGLY ADVISE NOT TO CHANGE ANYTHING HERE
      * MOST IMPORTANT THINGS ARE IN HERE AKA THE PART THAT WAS REQUESTED
@@ -12,19 +12,22 @@ module.exports = async (client,message) => {
     if(message.channel.type === "dm") return;
     if(message.author.bot) return;
 
-    message_sent.todaysRecord[2] += 1
+    if(userMessages.has("serverToday")) userMessages.inc("serverToday")
+    else userMessages.set("serverToday",1)
 
-    if(message_sent[message.author.id]){
+    let userid = message.author.id;
+    
+    if(userMessages.has(userid)){
 
-        message_sent[message.author.id] += 1;
+        userMessages.inc(userid);
 
-        if(message_sent.todaysRecord[1] < message_sent[message.author.id]){
-            message_sent.todaysRecord[0] = message.author.id;
-            message_sent.todaysRecord[1] = message_sent[message.author.id];
+        if(message_sent.userToday[1] < userMessages.get(userid)){
+            message_sent.userToday[0] = message.author.id;
+            message_sent.userToday[1] = userMessages.get(userid);
         }
 
-    }else{message_sent[message.author.id] = 1}
-    
+    }else userMessages.set(userid,1);
+
     fs.writeFile("message_sent.json",JSON.stringify(message_sent), (err)=>{console.error});
 
     
@@ -42,7 +45,8 @@ module.exports = async (client,message) => {
                 fs.readdir(`./commands/${files}`, (err,commands) => {
                     if(commands.includes(`${cmd}.js`)){
                         cmdFile = require(`../commands/${files}/${cmd}.js`);
-                        cmdFile.run(client,message,args);
+                        if(cmd !== 'peak')  cmdFile.run(client,message,args);
+                        else cmdFile.run(client,message,args,userMessages);
                     }
                 });
             });

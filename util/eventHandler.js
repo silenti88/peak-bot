@@ -1,6 +1,6 @@
 const reqEvent = (event) => require(`../events/${event}`);
 
-module.exports = client => {
+module.exports = (client,userMessages) => {
     /**
      * This handles all the events needed for the bot
      * No need to toggle anything here
@@ -10,5 +10,5 @@ module.exports = client => {
      client.on("reconnecting", () => reqEvent("reconnecting")(client));
      client.on("disconnect", () => reqEvent("disconnect")(client));
      client.on("error", () => reqEvent("error")(client));
-     client.on("message", async message => reqEvent("message")(client,message));
+     client.on("message", async message => reqEvent("message")(client,message,userMessages));
 }
