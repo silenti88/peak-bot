@@ -9,7 +9,7 @@ client.commands = new Discord.Collection();
 require("./util/eventHandler")(client,userMessages);
 
 if(announcementChannel.channel !== "undefined"){
-    let dayInMilliseconds = 1000 * 30;
+    let dayInMilliseconds = 1000 * 60 * 60 *24;
     let today = new Date();
     setInterval(function announce(){
         /**
