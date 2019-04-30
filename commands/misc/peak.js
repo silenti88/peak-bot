@@ -14,7 +14,13 @@ module.exports.run = async (client, message, args, userMessages) => {
       message.channel.send("There is no previous highest of all time. The most active of today however is "+todaysHighest+" with "+message_sent.userToday[1]+" messages");
    }else{
       oatUser = oatUser.username;
-      message.channel.send('The current highest of all time is '+oatUser+" with "+message_sent.userOAT[1]+". The most active of today so far is "+todaysHighest);
+      let reply = "**__Today Statistics__**\n\n**__Server Statistics__**\n"
+      reply += "So far today we have "+userMessages.get("serverToday")+" the current record is "
+      reply += message_sent.serverOAT[0]+" set on "+message_sent.serverOAT[1]+".\n\n"
+      reply += "**__User Statistics__**\nThe highest message sent by one user is "+message_sent.userOAT[1]+' on '+message_sent.userOAT[2]+' by '+oatUser+"."
+      reply += " The current highest of today is "+message_sent.userToday[1]+" set by "+todaysHighest+"."
+      
+      message.channel.send(reply);
    }
 
 } 
