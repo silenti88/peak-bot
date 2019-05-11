@@ -9,13 +9,17 @@ client.commands = new Discord.Collection();
 require("./util/eventHandler")(client,userMessages);
 
 if(announcementChannel.channel !== "undefined"){
-    let dayInMilliseconds = 1000 * 60 * 60 *24;
+    let minutes = 1000 * 55;
     let today = new Date();
     setInterval(function announce(){
         /**
          * This is the announcement at the end of the day feel free to 
          * change this to suite your needs.
          */
+        today = new Date();
+        today = today.getTime() + (today.getTimezoneOffset() * 60000);
+        today = new Date(today + (3600000*+2));
+        if(today.getHours() !== 23 || today.getMinutes() !== 59) return;
         let monthNames = [
             "January", "February", "March",
             "April", "May", "June", "July",
@@ -66,7 +70,7 @@ if(announcementChannel.channel !== "undefined"){
         fs.writeFile('message_sent.json',JSON.stringify(message_sent),(err)=>{console.error()});
         client.channels.find(ch => ch.name === announcementChannel.channel).send(announcement);
 
-    },dayInMilliseconds);
+    },minutes);
 }
 // Please enter your token for your bot or it will not run!!!
 client.login("ENTERTOKENHERE");
